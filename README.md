@@ -10,8 +10,8 @@ manage nsupdate for dynamic creation or DNS records
 3. [Setup - The basics of getting started with [Modulename]](#setup)
  * [Setup requirements](#setup-requirements)
 4. [Usage - Configuration options and additional functionality](#usage)
- * [nsupdate::update](nsupdateupdate)
- * [nsupdate::reverse](nsupdatereverse)
+ * [nsupdate::update](#nsupdateupdate)
+ * [nsupdate::reverse](#nsupdatereverse)
 
 ##Overview
 This module manage dynamic dns record creation through nsupdate.
