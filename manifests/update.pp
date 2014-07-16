@@ -90,7 +90,7 @@ define nsupdate::update (
   $key_name         = '',
   $interface        = '',
   $monitor          = false,
-  $nagios_hostname  = 'tiglio'
+  $nagios_hostname  = $::nagios_hostname
 ) {
 
   include nsupdate
