@@ -137,14 +137,16 @@ define nsupdate::update (
   }
 
   exec {"delete_record_${namehost}_${zone}":
-    command  => "/usr/local/sbin/dynamic-nsupdate -a del -z $zone -h $namehost $record_content -k $private_key -n $private_key_name -r $record_type -t $ttl -s $real_nameserver",
-    unless   => "/usr/local/sbin/dynamic-nsupdate -a check -z $zone -h $namehost $record_content -k $private_key -n $private_key_name -r $record_type -t $ttl -s $real_nameserver",
-    require  => File['/usr/local/sbin/dynamic-nsupdate'],
+    command   => "/usr/local/sbin/dynamic-nsupdate -a del -z $zone -h $namehost $record_content -k $private_key -n $private_key_name -r $record_type -t $ttl -s $real_nameserver",
+    unless    => "/usr/local/sbin/dynamic-nsupdate -a check -z $zone -h $namehost $record_content -k $private_key -n $private_key_name -r $record_type -t $ttl -s $real_nameserver",
+    logoutput => 'on_failure',
+    require   => File['/usr/local/sbin/dynamic-nsupdate'],
   }
 
   exec {"add_record_${namehost}_${zone}":
     command     => "/usr/local/sbin/dynamic-nsupdate -a add -z $zone -h $namehost $record_content -k $private_key -n $private_key_name -r $record_type -t $ttl -s $real_nameserver",
     unless      => "/usr/local/sbin/dynamic-nsupdate -a check -z $zone -h $namehost $record_content -k $private_key -n $private_key_name -r $record_type -t $ttl -s $real_nameserver",
+    logoutput => 'on_failure',
     require     => File['/usr/local/sbin/dynamic-nsupdate'],
     subscribe   => Exec["delete_record_${namehost}_${zone}"],
     refreshonly => true
@@ -167,7 +169,7 @@ define nsupdate::update (
       string_check  => $string_check,
     }
 
-    @@nagios::check {$check_name:
+    @@nagios::check { $check_name:
       checkname             => 'check_nrpe_1arg',
       service_description   => "dig ${check_name}",
       params                => "!check_dig_$check_name",
